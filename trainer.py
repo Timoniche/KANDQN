@@ -12,10 +12,11 @@ def train(
         env,
         num_episodes,
         device,
+        seed,
         wandbrun=None,
 ):
     for i_episode in tqdm(range(num_episodes)):
-        state, info = env.reset()
+        state, info = env.reset(seed=seed)
         state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
         episode_losses = []
         for t in count():

@@ -1,9 +1,11 @@
 import os
 
 import click
+import numpy as np
 import torch
 import wandb
 import yaml
+import random
 
 import gymnasium as gym
 
@@ -11,6 +13,27 @@ from yaml import CLoader
 
 from dqn import DQN, EpsilonExploration
 from trainer import train
+
+
+def _fix_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.mps.deterministic = True
+
+
+def prepare_env(seed):
+    env = gym.make("CartPole-v1")
+    state, _ = env.reset(seed=seed)
+    # noinspection PyUnresolvedReferences
+    n_actions = env.action_space.n
+    n_observations = len(state)
+    env.action_space.seed(seed=seed)
+
+    return env, n_actions, n_observations
 
 
 @click.command()
@@ -27,6 +50,10 @@ def main(config_file):
 
     training_args = config['training_args']
 
+    seed = training_args['seed']
+    _fix_seed(seed)
+    env, n_actions, n_observations = prepare_env(seed)
+
     wandb_enabled = False
     wandbrun = None
 
@@ -39,12 +66,6 @@ def main(config_file):
             config=config,
             name=config['training_args']['run_name'],
         )
-
-    env = gym.make("CartPole-v1")
-    # noinspection PyUnresolvedReferences
-    n_actions = env.action_space.n
-    state, info = env.reset()
-    n_observations = len(state)
 
     epsilon_exploration = EpsilonExploration(
         eps_start=training_args['eps_start'],
@@ -69,6 +90,7 @@ def main(config_file):
         num_episodes=training_args['num_episodes'],
         env=env,
         device=device,
+        seed=seed,
         wandbrun=wandbrun,
     )
 

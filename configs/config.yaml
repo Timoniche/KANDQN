@@ -2,6 +2,7 @@ common:
   project: KANDQN
 
 training_args:
+  seed: 42
   batch_size: 128
   gamma: 0.99
   eps_start: 0.9
