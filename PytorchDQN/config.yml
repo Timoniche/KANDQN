@@ -2,4 +2,4 @@ common:
   project: KANDQN
 
 training_args:
-  run_name: pytorch-mlp-episodes_385
+  run_name: pytorch-mlp-episodes_600
