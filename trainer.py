@@ -4,17 +4,16 @@ import torch
 from tqdm import tqdm
 
 from dqn import DQN
-from params import device
 from itertools import count
 
 
 def train(
         dqn: DQN,
         env,
-        wandbrun,
+        num_episodes,
+        device,
+        wandbrun=None,
 ):
-    num_episodes = 600
-
     for i_episode in tqdm(range(num_episodes)):
         state, info = env.reset()
         state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
@@ -42,6 +41,7 @@ def train(
             if done:
                 reward = t + 1
                 episode_mean_loss = mean(episode_losses)
-                print("episode: {} , the episode reward is {}".format(i_episode, reward))
-                wandbrun.log({'loss': episode_mean_loss, 'reward': reward})
+                print("episode: {}, the episode reward is {}".format(i_episode, reward))
+                if wandbrun is not None:
+                    wandbrun.log({'loss': episode_mean_loss, 'reward': reward})
                 break

@@ -1,5 +1,0 @@
-common:
-  project: KANDQN
-
-training_args:
-  run_name: pytorch-episodes_600-refactored
