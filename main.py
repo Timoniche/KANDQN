@@ -11,7 +11,7 @@ import gymnasium as gym
 
 from yaml import CLoader
 
-from init_agent import init_agent
+from agents.init_agent import init_agent
 from trainer import train
 
 

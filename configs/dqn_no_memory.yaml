@@ -3,8 +3,8 @@ common:
 
 training_args:
   seed: 42
-  num_episodes: 400
-  run_name: dqn_no_memory-episodes_400-seed_42
+  num_episodes: 600
+  run_name: dqn_no_memory-episodes_600-seed_42
   agent: dqn
   agent_kwargs:
     batch_size: 1
