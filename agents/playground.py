@@ -131,8 +131,7 @@ class Playground:
                         .item()
                     )
                 next_observation, reward, terminated, truncated, info = env.step(action)
-                # if config.env_id == "CartPole-v1":
-                #     reward = -1 if terminated else 0
+                reward = -1 if terminated else 0
                 next_observation = torch.from_numpy(next_observation)
 
                 self.buffer.add(observation, action, next_observation, reward, terminated)
