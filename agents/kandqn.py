@@ -1,13 +1,17 @@
 import math
 import random
+from itertools import count
+from statistics import mean
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from tqdm import tqdm
 
 from Transition import Transition
 from replay_memory import ReplayMemory
 from kan import KAN
+
 
 class EpsilonExploration:
     def __init__(
@@ -45,6 +49,7 @@ class KANDQN:
             tau,
             lr,
             replay_memory_capacity,
+            target_update_freq,
             device,
     ):
         self.policy_net = KAN(
@@ -80,6 +85,7 @@ class KANDQN:
         )
         self.tau = tau
 
+        self.target_update_freq = target_update_freq
         self.device = device
 
     def select_action(self, state, env):
@@ -91,14 +97,6 @@ class KANDQN:
 
     def store_transition(self, state, action, next_state, reward):
         self.memory.push(state, action, next_state, reward)
-
-    def update_target_network(self):
-        target_net_state_dict = self.target_net.state_dict()
-        policy_net_state_dict = self.policy_net.state_dict()
-        for key in policy_net_state_dict:
-            target_net_state_dict[key] = (policy_net_state_dict[key] * self.tau +
-                                          target_net_state_dict[key] * (1 - self.tau))
-        self.target_net.load_state_dict(target_net_state_dict)
 
     def optimize_model(self):
         if len(self.memory) < self.batch_size:
@@ -131,7 +129,47 @@ class KANDQN:
 
         self.optimizer.zero_grad()
         loss.backward()
-        torch.nn.utils.clip_grad_value_(self.policy_net.parameters(), 100)
         self.optimizer.step()
 
         return loss.item()
+
+    def train(
+            self,
+            env,
+            num_episodes,
+            device,
+            seed,
+            wandbrun=None,
+    ):
+        for i_episode in tqdm(range(num_episodes)):
+            state, info = env.reset(seed=seed)
+            state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
+            episode_losses = []
+            for t in count():
+                action = self.select_action(state, env)
+                observation, reward, terminated, truncated, _ = env.step(action.item())
+                reward = torch.tensor([reward], device=device)
+                done = terminated or truncated
+
+                if terminated:
+                    next_state = None
+                else:
+                    next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0)
+
+                self.store_transition(state, action, next_state, reward)
+
+                step_loss = self.optimize_model()
+                episode_losses.append(step_loss)
+
+                state = next_state
+
+                if done:
+                    reward = t + 1
+                    episode_mean_loss = mean(episode_losses)
+                    print("episode: {}, the episode reward is {}".format(i_episode, reward))
+                    if wandbrun is not None:
+                        wandbrun.log({'loss': episode_mean_loss, 'reward': reward})
+                    break
+
+            if i_episode % self.target_update_freq == 0:
+                self.target_net.load_state_dict(self.policy_net.state_dict())

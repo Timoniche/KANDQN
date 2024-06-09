@@ -6,6 +6,7 @@ training_args:
   num_episodes: 400
   run_name: kandqn-episodes_400-seed_42
   agent: kandqn
+  use_cuda: False
   agent_kwargs:
     width: 8
     grid: 5
@@ -17,3 +18,4 @@ training_args:
     tau: 0.005
     lr: 1.0e-04
     replay_memory_capacity: 10000
+    target_update_freq: 10

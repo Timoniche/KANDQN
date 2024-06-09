@@ -6,6 +6,7 @@ training_args:
   num_episodes: 600
   run_name: dqn_no_memory-episodes_600-seed_42
   agent: dqn
+  use_cuda: False
   agent_kwargs:
     batch_size: 1
     gamma: 0.99

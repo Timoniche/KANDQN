@@ -12,7 +12,6 @@ import gymnasium as gym
 from yaml import CLoader
 
 from agents.init_agent import init_agent
-from trainer import train
 
 
 def _fix_seed(seed):
@@ -43,16 +42,19 @@ def main(
         config_file,
         wandb_enabled,
 ):
-    device = torch.device(
-        "cuda" if torch.cuda.is_available()
-        else "mps" if torch.backends.mps.is_available()
-        else "cpu"
-    )
-
     with open(config_file, 'r') as f:
         config = yaml.load(f, Loader=CLoader)
 
     training_args = config['training_args']
+
+    if training_args['use_cuda']:
+        device = torch.device(
+            "cuda" if torch.cuda.is_available()
+            else "mps" if torch.backends.mps.is_available()
+            else "cpu"
+        )
+    else:
+        device = "cpu"
 
     seed = training_args['seed']
     _fix_seed(seed)
@@ -76,8 +78,7 @@ def main(
         device=device,
     )
 
-    train(
-        agent,
+    agent.train(
         num_episodes=training_args['num_episodes'],
         env=env,
         device=device,
