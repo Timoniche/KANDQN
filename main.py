@@ -38,7 +38,7 @@ def prepare_env(seed):
 
 @click.command()
 @click.option("--config_file", default="configs/dqn.yaml", help="Path to config YAML file")
-@click.option("--wandb_enabled", default=True, help="Send metrics to wandb")
+@click.option("--wandb_enabled", default=False, help="Send metrics to wandb")
 def main(
         config_file,
         wandb_enabled,

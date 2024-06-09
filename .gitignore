@@ -2,3 +2,4 @@
 /.venv/
 /PytorchTutorialDQN/wandb/
 /wandb/
+run.sh
