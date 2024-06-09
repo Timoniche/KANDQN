@@ -1,7 +1,9 @@
 from agents.dqn import DQN
+from agents.kandqn import KANDQN
 
 AGENT_DICT = {
     "dqn": DQN,
+    "kandqn": KANDQN,
 }
 
 
