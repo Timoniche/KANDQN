@@ -3,12 +3,11 @@ from statistics import mean
 import torch
 from tqdm import tqdm
 
-from dqn import DQN
 from itertools import count
 
 
 def train(
-        dqn: DQN,
+        agent,
         env,
         num_episodes,
         device,
@@ -20,7 +19,7 @@ def train(
         state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
         episode_losses = []
         for t in count():
-            action = dqn.select_action(state, env)
+            action = agent.select_action(state, env)
             observation, reward, terminated, truncated, _ = env.step(action.item())
             reward = torch.tensor([reward], device=device)
             done = terminated or truncated
@@ -30,14 +29,14 @@ def train(
             else:
                 next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0)
 
-            dqn.store_transition(state, action, next_state, reward)
+            agent.store_transition(state, action, next_state, reward)
 
-            state = next_state
-
-            step_loss = dqn.optimize_model()
+            step_loss = agent.optimize_model()
             episode_losses.append(step_loss)
 
-            dqn.update_target_network()
+            agent.update_target_network()
+
+            state = next_state
 
             if done:
                 reward = t + 1

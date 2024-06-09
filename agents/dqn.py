@@ -38,7 +38,9 @@ class DQN:
             n_actions,
             batch_size,
             gamma,
-            epsilon_exploration: EpsilonExploration,
+            eps_start,
+            eps_end,
+            eps_decay,
             tau,
             lr,
             replay_memory_capacity,
@@ -54,7 +56,11 @@ class DQN:
 
         self.batch_size = batch_size
         self.gamma = gamma
-        self.epsilon_exploration = epsilon_exploration
+        self.epsilon_exploration = EpsilonExploration(
+            eps_start=eps_start,
+            eps_end=eps_end,
+            eps_decay=eps_decay,
+        )
         self.tau = tau
 
         self.device = device
