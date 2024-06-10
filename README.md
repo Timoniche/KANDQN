@@ -5,6 +5,9 @@ https://www.gymlibrary.dev/environments/classic_control/cart_pole/
 ### PyTorch MLP DQN Tutorial
 https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html
 
+### Riiswa KAQN
+https://github.com/riiswa/kanrl
+
 ## Dependencies to create CartPole video (Optional)
 
 Before launch:

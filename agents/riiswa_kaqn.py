@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+# noinspection PyPackageRequirements
 from kan import KAN
 import numpy as np
 from tqdm import tqdm
@@ -40,7 +41,8 @@ class ReplayBuffer:
         return min(self.cursor, self.capacity)
 
 
-class Playground:
+class RiiswaKAQN:
+    # noinspection PyUnusedLocal
     def __init__(
             self,
             width,
@@ -53,8 +55,8 @@ class Playground:
             replay_memory_capacity,
             target_update_freq,
             episode_train_steps,
-            device,
             warm_up_episodes,
+            device,
     ):
         self.q_network = KAN(
             width=[n_observations, width, n_actions],
@@ -81,37 +83,30 @@ class Playground:
         self.target_update_freq = target_update_freq
         self.episode_train_steps = episode_train_steps
 
-    def _train(
-            self,
-            net,
-            target,
-            data,
-            optimizer,
-            gamma=0.99,
-    ):
-        observations, actions, next_observations, rewards, terminations = data
+    def optimize_model(self):
+        observations, actions, next_observations, rewards, terminations = self.buffer.sample(self.batch_size)
 
         with torch.no_grad():
-            next_q_values = net(next_observations)
+            next_q_values = self.q_network(next_observations)
             next_actions = next_q_values.argmax(dim=1)
-            next_q_values_target = target(next_observations)
+            next_q_values_target = self.target_network(next_observations)
             target_max = next_q_values_target[range(len(next_q_values)), next_actions]
-            td_target = rewards.flatten() + gamma * target_max * (
+            td_target = rewards.flatten() + self.gamma * target_max * (
                     1 - terminations.flatten()
             )
 
-        old_val = net(observations).gather(1, actions).squeeze()
+        old_val = self.q_network(observations).gather(1, actions).squeeze()
         loss = nn.functional.mse_loss(td_target, old_val)
-        optimizer.zero_grad()
+        self.optimizer.zero_grad()
         loss.backward()
-        optimizer.step()
+        self.optimizer.step()
+
         return loss.item()
 
     def train(
             self,
             env,
             num_episodes,
-            device,
             seed,
             only_terminal_negative_reward,
             wandbrun=None,
@@ -142,18 +137,10 @@ class Playground:
                 finished = terminated or truncated
                 episode_length += 1
 
+            loss = 0
             if len(self.buffer) >= self.batch_size:
                 for _ in range(self.episode_train_steps):
-                    loss = self._train(
-                        self.q_network,
-                        self.target_network,
-                        self.buffer.sample(self.batch_size),
-                        self.optimizer,
-                        self.gamma,
-                    )
-                print("episode: {}, the episode reward is {}".format(episode, episode_length))
-                # writer.add_scalar("episode_length", episode_length, episode)
-                # writer.add_scalar("loss", loss, episode)
+                    loss = self.optimize_model()
                 if (
                         episode % 25 == 0
                         and episode < int(num_episodes * (1 / 2))
@@ -165,3 +152,7 @@ class Playground:
 
                 if episode % self.target_update_freq == 0:
                     self.target_network.load_state_dict(self.q_network.state_dict())
+
+            print("episode: {}, the episode reward is {}".format(episode, episode_length))
+            if wandbrun is not None:
+                wandbrun.log({'loss': loss, 'reward': episode_length})

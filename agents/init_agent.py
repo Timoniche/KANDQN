@@ -1,13 +1,9 @@
 from agents.dqn import DQN
-from agents.kandqn import KANDQN
-from agents.playground import Playground
-from agents.riiswa_kan_dqn import RiiswaKANDQN
+from agents.riiswa_kaqn import RiiswaKAQN
 
 AGENT_DICT = {
     "dqn": DQN,
-    "kandqn": KANDQN,
-    "riiswa_kan_dqn": RiiswaKANDQN,
-    "playground": Playground,
+    "riiswa_kaqn": RiiswaKAQN,
 }
 
 

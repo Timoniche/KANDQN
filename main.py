@@ -36,7 +36,7 @@ def prepare_env(seed):
 
 
 @click.command()
-@click.option("--config_file", default="configs/dqn.yaml", help="Path to config YAML file")
+@click.option("--config_file", default="configs/riiswa_kaqn.yaml", help="Path to config YAML file")
 @click.option("--wandb_enabled", default=False, help="Send metrics to wandb")
 def main(
         config_file,
@@ -47,7 +47,7 @@ def main(
 
     training_args = config['training_args']
 
-    if training_args['use_cuda']:
+    if 'use_cuda' in training_args and training_args['use_cuda']:
         device = torch.device(
             "cuda" if torch.cuda.is_available()
             else "mps" if torch.backends.mps.is_available()
@@ -81,7 +81,6 @@ def main(
     agent.train(
         num_episodes=training_args['num_episodes'],
         env=env,
-        device=device,
         seed=seed,
         only_terminal_negative_reward=training_args['only_terminal_negative_reward'],
         wandbrun=wandbrun,
