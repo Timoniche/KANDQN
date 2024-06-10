@@ -7,6 +7,7 @@ training_args:
   run_name: playground-episodes_400-seed_42
   agent: playground
   use_cuda: False
+  only_terminal_negative_reward: True
   agent_kwargs:
     width: 8
     grid: 5

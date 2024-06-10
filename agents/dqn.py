@@ -128,6 +128,7 @@ class DQN:
             num_episodes,
             device,
             seed,
+            only_terminal_negative_reward,
             wandbrun=None,
     ):
         for i_episode in tqdm(range(num_episodes)):
@@ -137,6 +138,8 @@ class DQN:
             for t in count():
                 action = self.select_action(state, env)
                 observation, reward, terminated, truncated, _ = env.step(action.item())
+                if only_terminal_negative_reward:
+                    reward = -1 if terminated else 0
                 reward = torch.tensor([reward], device=device)
                 done = terminated or truncated
 

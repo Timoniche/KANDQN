@@ -36,7 +36,7 @@ def prepare_env(seed):
 
 
 @click.command()
-@click.option("--config_file", default="configs/playground.yaml", help="Path to config YAML file")
+@click.option("--config_file", default="configs/dqn.yaml", help="Path to config YAML file")
 @click.option("--wandb_enabled", default=False, help="Send metrics to wandb")
 def main(
         config_file,
@@ -83,6 +83,7 @@ def main(
         env=env,
         device=device,
         seed=seed,
+        only_terminal_negative_reward=training_args['only_terminal_negative_reward'],
         wandbrun=wandbrun,
     )
 

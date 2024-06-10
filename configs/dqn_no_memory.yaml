@@ -4,9 +4,10 @@ common:
 training_args:
   seed: 42
   num_episodes: 600
-  run_name: dqn_no_memory-episodes_600-seed_42
+  run_name: dqn_no_memory-only_terminal_reward-episodes_600-seed_42
   agent: dqn
   use_cuda: False
+  only_terminal_negative_reward: True
   agent_kwargs:
     batch_size: 1
     gamma: 0.99

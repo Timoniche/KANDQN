@@ -113,10 +113,11 @@ class Playground:
             num_episodes,
             device,
             seed,
+            only_terminal_negative_reward,
             wandbrun=None,
     ):
         for episode in tqdm(range(num_episodes)):
-            observation, info = env.reset()
+            observation, info = env.reset(seed=seed)
             observation = torch.from_numpy(observation)
             finished = False
             episode_length = 0
@@ -131,7 +132,8 @@ class Playground:
                         .item()
                     )
                 next_observation, reward, terminated, truncated, info = env.step(action)
-                reward = -1 if terminated else 0
+                if only_terminal_negative_reward:
+                    reward = -1 if terminated else 0
                 next_observation = torch.from_numpy(next_observation)
 
                 self.buffer.add(observation, action, next_observation, reward, terminated)
