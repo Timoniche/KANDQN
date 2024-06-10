@@ -6,6 +6,7 @@ from statistics import mean
 import torch
 import torch.nn as nn
 import torch.optim as optim
+# noinspection PyPackageRequirements
 from kan import KAN
 from tqdm import tqdm
 
@@ -13,6 +14,7 @@ from Transition import Transition
 from replay_memory import ReplayMemory
 
 
+# noinspection DuplicatedCode
 class EpsilonExploration:
     def __init__(
             self,
@@ -34,6 +36,7 @@ class EpsilonExploration:
         return sample > eps_threshold
 
 
+# noinspection DuplicatedCode
 class KAQN:
     def __init__(
             self,

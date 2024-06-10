@@ -36,7 +36,7 @@ def prepare_env(seed):
 
 
 @click.command()
-@click.option("--config_file", default="configs/simple_riiswa_kaqn.yaml", help="Path to config YAML file")
+@click.option("--config_file", default="configs/kaqn.yaml", help="Path to config YAML file")
 @click.option("--wandb_enabled", default=False, help="Send metrics to wandb")
 def main(
         config_file,

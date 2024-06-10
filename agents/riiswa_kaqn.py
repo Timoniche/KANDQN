@@ -6,6 +6,7 @@ import numpy as np
 from tqdm import tqdm
 
 
+# noinspection DuplicatedCode
 class ReplayBuffer:
     def __init__(self, capacity, observation_dim):
         self.capacity = capacity
@@ -41,6 +42,7 @@ class ReplayBuffer:
         return min(self.cursor, self.capacity)
 
 
+# noinspection DuplicatedCode
 class RiiswaKAQN:
     # noinspection PyUnusedLocal
     def __init__(

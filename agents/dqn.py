@@ -13,6 +13,7 @@ from qnet import QNet
 from replay_memory import ReplayMemory
 
 
+# noinspection DuplicatedCode
 class EpsilonExploration:
     def __init__(
             self,
@@ -34,6 +35,7 @@ class EpsilonExploration:
         return sample > eps_threshold
 
 
+# noinspection DuplicatedCode
 class DQN:
     def __init__(
             self,
