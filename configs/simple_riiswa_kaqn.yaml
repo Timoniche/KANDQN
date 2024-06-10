@@ -1,0 +1,19 @@
+common:
+  project: KANDQN
+
+training_args:
+  seed: 42
+  num_episodes: 400
+  run_name: simple_riiswa_kaqn-only_terminal_reward-episodes_400-seed_42
+  agent: simple_riiswa_kaqn
+  only_terminal_negative_reward: True
+  agent_kwargs:
+    width: 8
+    grid: 5
+    batch_size: 128
+    gamma: 0.99
+    lr: 0.0005
+    replay_memory_capacity: 10000
+    target_update_freq: 10
+    episode_train_steps: 5
+    warm_up_episodes: 50
