@@ -1,9 +1,11 @@
 from agents.dqn import DQN
+from agents.kaqn import KAQN
 from agents.riiswa_kaqn import RiiswaKAQN
 
 AGENT_DICT = {
     "dqn": DQN,
     "riiswa_kaqn": RiiswaKAQN,
+    "kaqn": KAQN,
 }
 
 
