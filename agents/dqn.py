@@ -49,10 +49,19 @@ class DQN:
             tau,
             lr,
             replay_memory_capacity,
+            hidden_dim,
             device,
     ):
-        self.policy_net = QNet(n_observations, n_actions).to(device)
-        self.target_net = QNet(n_observations, n_actions).to(device)
+        self.policy_net = QNet(
+            n_observations=n_observations,
+            hidden_dim=hidden_dim,
+            n_actions=n_actions,
+        ).to(device)
+        self.target_net = QNet(
+            n_observations=n_observations,
+            hidden_dim=hidden_dim,
+            n_actions=n_actions,
+        ).to(device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
 
         self.optimizer = optim.AdamW(self.policy_net.parameters(), lr=lr, amsgrad=True)

@@ -17,3 +17,4 @@ training_args:
     tau: 0.005
     lr: 1.0e-04
     replay_memory_capacity: 10000
+    hidden_dim: 128

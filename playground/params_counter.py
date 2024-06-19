@@ -26,8 +26,14 @@ def main():
     n_observations = 4
     n_actions = 2
 
-    qnet = QNet(n_observations=n_observations, n_actions=n_actions)
-    print('QNet params: ', params(qnet))
+    hidden_dims = [32, 64, 128]
+    for hidden_dim in hidden_dims:
+        qnet = QNet(
+            n_observations=n_observations,
+            hidden_dim=hidden_dim,
+            n_actions=n_actions
+        )
+        print(f'QNet hidden: {hidden_dim}, params: ', params(qnet))
 
     widths = [
         [n_observations, 8, n_actions],
