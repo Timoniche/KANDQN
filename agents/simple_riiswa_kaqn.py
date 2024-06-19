@@ -60,13 +60,18 @@ class SimpleRiiswaKAQN:
             warm_up_episodes,
             device,
     ):
+        if isinstance(width, int):
+            self.width = [width]
+        else:
+            self.width = [int(x) for x in width.split(',')]
+        kan_layers = [n_observations] + self.width + [n_actions]
         self.q_network = KAN(
-            width=[n_observations, width, n_actions],
+            width=kan_layers,
             grid=grid,
             k=3,
         )
         self.target_network = KAN(
-            width=[n_observations, width, n_actions],
+            width=kan_layers,
             grid=grid,
             k=3,
         )

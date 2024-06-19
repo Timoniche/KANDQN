@@ -54,14 +54,19 @@ class KAQN:
             grid,
             device,
     ):
+        if isinstance(width, int):
+            self.width = [width]
+        else:
+            self.width = [int(x) for x in width.split(',')]
+        kan_layers = [n_observations] + self.width + [n_actions]
         self.policy_net = KAN(
-            width=[n_observations, width, n_actions],
+            width=kan_layers,
             grid=grid,
             k=3,
             device=device,
         )
         self.target_net = KAN(
-            width=[n_observations, width, n_actions],
+            width=kan_layers,
             grid=grid,
             k=3,
             device=device,
