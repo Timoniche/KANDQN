@@ -37,13 +37,13 @@ def main():
 
     widths = [
         [n_observations, 8, n_actions],
+        [n_observations, 9, n_actions],
         [n_observations, 8, 5, n_actions],
         [n_observations, 8, 16, 8, n_actions],
         [n_observations, 32, n_actions],
         [n_observations, 64, n_actions],
         [n_observations, 128, n_actions],
         [n_observations, 32, 32, n_actions],
-        [n_observations, 128, 128, n_actions],
     ]
     for width in widths:
         params_kan = kan_params(

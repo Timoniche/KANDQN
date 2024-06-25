@@ -3,9 +3,9 @@ common:
 
 training_args:
   seed: 42
-  num_episodes: 400
-  run_name: dqn-no_mem-width_64-episodes_400-seed_42
-  agent: dqn
+  num_episodes: 2000
+  run_name: kaqn-width_8-no_memory
+  agent: kaqn
   use_cuda: False
   only_terminal_negative_reward: True
   agent_kwargs:
@@ -17,4 +17,5 @@ training_args:
     tau: 0.005
     lr: 1.0e-04
     replay_memory_capacity: 1
-    hidden_dim: 64
+    width: 8
+    grid: 5

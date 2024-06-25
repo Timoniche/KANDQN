@@ -3,8 +3,8 @@ common:
 
 training_args:
   seed: 42
-  num_episodes: 400
-  run_name: kaqn-no_mem-width_32-episodes_400-seed_42
+  num_episodes: 2000
+  run_name: kaqn-width_32-no_memory
   agent: kaqn
   use_cuda: False
   only_terminal_negative_reward: True

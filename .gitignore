@@ -3,3 +3,5 @@
 /PytorchTutorialDQN/wandb/
 /wandb/
 run.sh
+/rewards_analyzer.py
+/reward_plots/
