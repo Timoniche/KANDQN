@@ -1,6 +1,7 @@
 # noinspection PyPackageRequirements
 from kan import KAN
 
+from efficient_kan import KAN as EKAN
 from fastkan import FastKAN
 from qnet import QNet
 
@@ -31,6 +32,16 @@ def fast_kan_params(
     )
 
     return params(fast_kan)
+
+
+def efficient_kan_params(
+        kan_layers,
+):
+    efficient_kan = EKAN(
+        layers_hidden=kan_layers,
+    )
+
+    return params(efficient_kan)
 
 
 def main():
@@ -68,6 +79,10 @@ def main():
     for width in widths:
         params_fast_kan = fast_kan_params(width)
         print(f'FAST KAN width: {width}, params: ', params_fast_kan)
+    print()
+    for width in widths:
+        params_ekan = efficient_kan_params(width)
+        print(f'EFFICIENT KAN width: {width}, params: ', params_ekan)
 
 
 if __name__ == '__main__':
