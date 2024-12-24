@@ -36,7 +36,7 @@ def prepare_env(seed):
 
 
 @click.command()
-@click.option("--config_file", default="configs/kaqn/kaqn_8.yaml", help="Path to config YAML file")
+@click.option("--config_file", default="configs/fkaqn/fkaqn_8.yaml", help="Path to config YAML file")
 @click.option("--wandb_enabled", default=False, help="Send metrics to wandb")
 def main(
         config_file,
@@ -46,6 +46,8 @@ def main(
         config = yaml.load(f, Loader=CLoader)
 
     training_args = config['training_args']
+    run_name = training_args['run_name']
+    print(f'run name: {run_name}')
 
     if 'use_cuda' in training_args and training_args['use_cuda']:
         device = torch.device(
