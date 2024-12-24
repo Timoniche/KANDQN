@@ -1,6 +1,7 @@
 # noinspection PyPackageRequirements
 from kan import KAN
 
+from fastkan import FastKAN
 from qnet import QNet
 
 
@@ -22,6 +23,16 @@ def kan_params(
     return params(kan_net)
 
 
+def fast_kan_params(
+        kan_layers,
+):
+    fast_kan = FastKAN(
+        layers_hidden=kan_layers,
+    )
+
+    return params(fast_kan)
+
+
 def main():
     n_observations = 4
     n_actions = 2
@@ -34,6 +45,7 @@ def main():
             n_actions=n_actions
         )
         print(f'QNet hidden: {hidden_dim}, params: ', params(qnet))
+    print()
 
     widths = [
         [n_observations, 8, n_actions],
@@ -52,6 +64,10 @@ def main():
             k=3,
         )
         print(f'KAN width: {width}, params: ', params_kan)
+    print()
+    for width in widths:
+        params_fast_kan = fast_kan_params(width)
+        print(f'FAST KAN width: {width}, params: ', params_fast_kan)
 
 
 if __name__ == '__main__':
