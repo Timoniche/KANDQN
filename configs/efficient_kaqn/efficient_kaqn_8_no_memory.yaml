@@ -4,8 +4,8 @@ common:
 training_args:
   seed: 42
   num_episodes: 2000
-  run_name: fast-kaqn-width_8-no-memory
-  agent: fkaqn
+  run_name: efficient-kaqn-width_8-no-memory
+  agent: efficient_kaqn
   use_cuda: False
   only_terminal_negative_reward: True
   agent_kwargs:
