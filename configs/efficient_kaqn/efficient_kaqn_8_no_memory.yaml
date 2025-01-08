@@ -3,7 +3,7 @@ common:
 
 training_args:
   seed: 42
-  num_episodes: 2000
+  num_episodes: 3000
   run_name: efficient-kaqn-width_8-no-memory
   agent: efficient_kaqn
   use_cuda: False
