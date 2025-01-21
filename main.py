@@ -1,6 +1,8 @@
 import os
+import pickle
 
 import click
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import wandb
@@ -58,35 +60,53 @@ def main(
     else:
         device = "cpu"
 
-    seed = training_args['seed']
-    _fix_seed(seed)
-    env, n_actions, n_observations = prepare_env(seed)
+    raw_seeds = training_args['seed']
+    if isinstance(raw_seeds, int):
+        seeds = [raw_seeds]
+    else:
+        seeds = [int(x) for x in raw_seeds.split(',')]
+    rewardss = []
+    for seed in seeds:
+        _fix_seed(seed)
+        env, n_actions, n_observations = prepare_env(seed)
 
-    wandbrun = None
-    if wandb_enabled:
-        wandb_key = os.getenv('WANDB_KEY')
-        wandb.login(key=wandb_key)
+        wandbrun = None
+        if wandb_enabled:
+            wandb_key = os.getenv('WANDB_KEY')
+            wandb.login(key=wandb_key)
 
-        wandbrun = wandb.init(
-            project=config['common']['project'],
-            config=config,
-            name=config['training_args']['run_name'],
+            wandbrun = wandb.init(
+                project=config['common']['project'],
+                config=config,
+                name=config['training_args']['run_name'],
+            )
+
+        agent = init_agent(
+            training_args=training_args,
+            n_actions=n_actions,
+            n_observations=n_observations,
+            device=device,
         )
 
-    agent = init_agent(
-        training_args=training_args,
-        n_actions=n_actions,
-        n_observations=n_observations,
-        device=device,
-    )
-
-    agent.train(
-        num_episodes=training_args['num_episodes'],
-        env=env,
-        seed=seed,
-        only_terminal_negative_reward=training_args['only_terminal_negative_reward'],
-        wandbrun=wandbrun,
-    )
+        rewards = agent.train(
+            num_episodes=training_args['num_episodes'],
+            env=env,
+            seed=seed,
+            only_terminal_negative_reward=training_args['only_terminal_negative_reward'],
+            wandbrun=wandbrun,
+        )
+        rewardss.append(rewards)
+    avg_rewards = []
+    for i in range(len(rewardss[0])):
+        fst_avg = 0.0
+        for j in range(len(rewardss)):
+            fst_avg += rewardss[j][i]
+        fst_avg /= len(rewardss)
+        avg_rewards.append(fst_avg)
+    with open(f'{run_name}.pkl', 'wb') as f:
+        pickle.dump(avg_rewards, f)
+    plt.plot(range(len(avg_rewards)), avg_rewards)
+    plt.show()
 
 
 if __name__ == '__main__':

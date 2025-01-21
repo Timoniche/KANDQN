@@ -144,6 +144,7 @@ class FASTKAQN:
             only_terminal_negative_reward,
             wandbrun=None,
     ):
+        rewards = []
         for i_episode in tqdm(range(num_episodes)):
             state, info = env.reset(seed=seed)
             state = torch.tensor(state, dtype=torch.float32, device=self.device).unsqueeze(0)
@@ -172,8 +173,11 @@ class FASTKAQN:
 
                 if done:
                     reward = t + 1
+                    rewards.append(reward)
                     episode_mean_loss = mean(episode_losses)
                     print("episode: {}, the episode reward is {}".format(i_episode, reward))
                     if wandbrun is not None:
                         wandbrun.log({'loss': episode_mean_loss, 'reward': reward})
                     break
+
+        return rewards
