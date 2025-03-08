@@ -41,9 +41,9 @@ def plot_maxs(memories, efficient_maxs, dqn_maxs):
 def main():
     memories = [
         1,
-        # 128,
-        # 500,
-        # 1000,
+        128,
+        500,
+        1000,
         # 2000,
         # 5000,
         # 10000,

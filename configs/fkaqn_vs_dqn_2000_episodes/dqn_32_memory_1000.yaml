@@ -1,0 +1,20 @@
+common:
+  project: KANDQN
+
+training_args:
+  seed: 42,43,44
+  num_episodes: 2000
+  run_name: dqn-width_32_memory_1000
+  agent: dqn
+  use_cuda: False
+  only_terminal_negative_reward: True
+  agent_kwargs:
+    batch_size: 128
+    gamma: 0.99
+    eps_start: 0.9
+    eps_end: 0.05
+    eps_decay: 1000
+    tau: 0.005
+    lr: 1.0e-04
+    replay_memory_capacity: 1000
+    hidden_dim: 32
