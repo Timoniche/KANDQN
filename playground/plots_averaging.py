@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 
 def main():
-    fkaqn_rewards = './../fast-kaqn-width_8-no-memory-10-seeds.pkl'
+    # fkaqn_rewards = './../fast-kaqn-width_8-no-memory-10-seeds.pkl'
+    fkaqn_rewards = './../runs_dump/fast-kaqn-width_8-no-memory-10-seeds.pkl'
     dqn_rewards = './../dqn-width_32-no_memory-10-seeds.pkl'
     with open(fkaqn_rewards, 'rb') as file:
         fkaqn = pickle.load(file)

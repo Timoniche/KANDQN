@@ -61,6 +61,7 @@ def main():
     widths = [
         [n_observations, 8, n_actions],
         [n_observations, 9, n_actions],
+        [n_observations, 16, n_actions],
         [n_observations, 8, 5, n_actions],
         [n_observations, 8, 16, 8, n_actions],
         [n_observations, 32, n_actions],

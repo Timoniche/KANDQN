@@ -38,8 +38,8 @@ def prepare_env(seed):
 
 
 @click.command()
-@click.option("--config_file", default="configs/efficient_kaqn/efficient_kaqn_8.yaml", help="Path to config YAML file")
-@click.option("--wandb_enabled", default=False, help="Send metrics to wandb")
+@click.option("--config_file", default="configs/fkaqn/fkaqn_16.yaml", help="Path to config YAML file")
+@click.option("--wandb_enabled", default=True, help="Send metrics to wandb")
 def main(
         config_file,
         wandb_enabled,
@@ -103,7 +103,9 @@ def main(
             fst_avg += rewardss[j][i]
         fst_avg /= len(rewardss)
         avg_rewards.append(fst_avg)
-    with open(f'{run_name}.pkl', 'wb') as f:
+    dump_folder = 'runs_dump'
+    os.makedirs(dump_folder, exist_ok=True)
+    with open(f'{dump_folder}/{run_name}.pkl', 'wb') as f:
         pickle.dump(avg_rewards, f)
     plt.plot(range(len(avg_rewards)), avg_rewards)
     plt.show()
