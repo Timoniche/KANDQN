@@ -38,8 +38,8 @@ def prepare_env(seed):
 
 
 @click.command()
-@click.option("--config_file", default="configs/kaeqn/kaeqn_32.yaml", help="Path to config YAML file")
-@click.option("--wandb_enabled", default=True, help="Send metrics to wandb")
+@click.option("--config_file", default="configs/efficient_vs_dqn/efficient_16_memory_1.yaml", help="Path to config YAML file")
+@click.option("--wandb_enabled", default=False, help="Send metrics to wandb")
 def main(
         config_file,
         wandb_enabled,
