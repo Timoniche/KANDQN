@@ -1,6 +1,7 @@
 from agents.dqn import DQN
 from agents.efficient_kaqn import EfficientKAQN
 from agents.fastkaqn import FASTKAQN
+from agents.kaeqn import KAEQN
 from agents.kaqn import KAQN
 from agents.riiswa_kaqn import RiiswaKAQN
 from agents.simple_riiswa_kaqn import SimpleRiiswaKAQN
@@ -12,6 +13,7 @@ AGENT_DICT = {
     "fkaqn": FASTKAQN,
     "efficient_kaqn": EfficientKAQN,
     "simple_riiswa_kaqn": SimpleRiiswaKAQN,
+    "kaeqn": KAEQN,
 }
 
 

@@ -3,6 +3,7 @@ from kan import KAN
 
 from efficient_kan import KAN as EKAN
 from fastkan import FastKAN
+from kaenet import KAEImpl
 from qnet import QNet
 
 
@@ -42,6 +43,20 @@ def efficient_kan_params(
     )
 
     return params(efficient_kan)
+
+
+def kae_params(
+        n_observations,
+        width,
+        n_actions,
+):
+    kae = KAEImpl(
+        input_dim=n_observations,
+        latent_dim=width,
+        output_dim=n_actions,
+    )
+
+    return params(kae)
 
 
 def main():
@@ -84,6 +99,10 @@ def main():
     for width in widths:
         params_ekan = efficient_kan_params(width)
         print(f'EFFICIENT KAN width: {width}, params: ', params_ekan)
+    print()
+    kae_width = 32
+    params_kae = kae_params(n_observations, kae_width, n_actions)
+    print(f'KAE width: {kae_width}, params: ', params_kae)
 
 
 if __name__ == '__main__':

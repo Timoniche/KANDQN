@@ -38,7 +38,7 @@ def prepare_env(seed):
 
 
 @click.command()
-@click.option("--config_file", default="configs/fkaqn/fkaqn_16.yaml", help="Path to config YAML file")
+@click.option("--config_file", default="configs/kaeqn/kaeqn_32.yaml", help="Path to config YAML file")
 @click.option("--wandb_enabled", default=True, help="Send metrics to wandb")
 def main(
         config_file,
@@ -107,8 +107,10 @@ def main(
     os.makedirs(dump_folder, exist_ok=True)
     with open(f'{dump_folder}/{run_name}.pkl', 'wb') as f:
         pickle.dump(avg_rewards, f)
-    plt.plot(range(len(avg_rewards)), avg_rewards)
-    plt.show()
+    plot_needed = False
+    if plot_needed:
+        plt.plot(range(len(avg_rewards)), avg_rewards)
+        plt.show()
 
 
 if __name__ == '__main__':

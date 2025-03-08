@@ -13,18 +13,43 @@ def count_statistics(rewards, name):
 
     return max_reward, median
 
+
+def plot_medians(memories, fkaqn_meds, dqn_meds):
+    x = range(len(memories))
+    plt.plot(x, fkaqn_meds, color='red', label='FastKAN Medians, hidden=16, 938 params')
+    plt.plot(x, dqn_meds, color='blue', label='DQN Medians, hidden=32, 1282 params')
+    plt.xticks(x, memories)
+    plt.xlabel('Replay Memory Size')
+    plt.ylabel('Median Reward')
+    plt.legend()
+    plt.title('Medians FastKAN vs DQN')
+    plt.show()
+
+
+def plot_maxs(memories, fkaqn_maxs, dqn_maxs):
+    x = range(len(memories))
+    plt.plot(x, fkaqn_maxs, color='red', label='FastKAN Max Reward, hidden=16, 938 params')
+    plt.plot(x, dqn_maxs, color='blue', label='DQN Max Reward, hidden=32, 1282 params')
+    plt.xticks(x, memories)
+    plt.xlabel('Replay Memory Size')
+    plt.ylabel('Max Reward')
+    plt.legend()
+    plt.title('Max Rewards FastKAN vs DQN')
+    plt.show()
+
+
 def main():
     memories = [
         1,
         128,
         500,
         1000,
-        2000,
-        5000,
-        10000,
-        20000,
-        50000,
-        100000,
+        # 2000,
+        # 5000,
+        # 10000,
+        # 20000,
+        # 50000,
+        # 100000,
     ]
     fkaqn_maxs = []
     fkaqn_meds = []
@@ -47,15 +72,8 @@ def main():
         dqn_maxs.append(dqn_max)
         dqn_meds.append(dqn_med)
 
-    x = range(len(memories))
-    plt.plot(x, fkaqn_meds, color='red', label='FastKAN Medians, hidden=16, 938 params')
-    plt.plot(x, dqn_meds, color='blue', label='DQN Medians, hidden=32, 1282 params')
-    plt.xticks(x, memories)
-    plt.xlabel('Replay Memory Size')
-    plt.ylabel('Median Reward')
-    plt.legend()
-    plt.title('Medians FastKAN vs DQN')
-    plt.show()
+    plot_medians(memories, fkaqn_meds, dqn_meds)
+    plot_maxs(memories, fkaqn_maxs, dqn_maxs)
 
 
 if __name__ == '__main__':
